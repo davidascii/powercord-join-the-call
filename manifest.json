@@ -1,0 +1,7 @@
+{
+  "name": "JoinTheCall",
+  "version": "0.0.1",
+  "description": "eplaces the user's context menu 'Call' button with a 'Join the Call' button that allows you to connect in the same Voice Channel as the user or start a DM Call",
+  "author": "Tod#0312",
+  "license": "MIT"
+}
