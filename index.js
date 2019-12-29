@@ -46,9 +46,16 @@ class Cellophane extends Plugin {
     return (!err.length) ? `Following ${user.username}#${user.discriminator}...` : err.join(',\n');
   }
 
+  async getCurrentLanguage () {
+    const discordLanguages = await getModule([ 'languages' ]);
+    const currentLanguageCode = discordLanguages.getLocaleInfo().code;
+
+    return currentLanguageCode.substring(0, currentLanguageCode.indexOf('-'));
+  }
+
   clickCopyIdButton (buttons) {
     for (let i = 0; i < buttons.length; i++) {
-      if (buttons[i].innerText === 'Copy ID') {
+      if (buttons[i].innerText === 'Copy ID' || buttons[i].innerText === 'Copiar ID') {
         buttons[i].click();
         return clipboard.readText();
       }
@@ -57,14 +64,15 @@ class Cellophane extends Plugin {
 
   async joinCallButton () {
     const userCallItem = await getModuleByDisplayName('UserCallItem');
+    const lang = await this.getCurrentLanguage();
 
     inject('cellophane-joincalliten', userCallItem.prototype, 'render', (_, res) => {
       const privateCall = res.props.action;
 
-      const callOptions = [ '🔈 This Server', '🔈 Other Server', '📞 DM Call' ];
+      const callOptions = (lang === 'en') ? [ '🔈 This Server', '🔈 Other Server', '📞 DM Call' ] : [ '🔈 Neste Servidor', '🔈 Outro Servidor', '📞 Chamada Privada' ];
 
       res = React.createElement(JoinTheCallSubmenu, {
-        name: 'Join the Call',
+        name: (lang === 'en') ? 'Join the Call' : 'Participar da Call',
         getItems: () =>
           callOptions
             .map(button => ({
